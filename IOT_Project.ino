@@ -1,0 +1,81 @@
+#include <Servo.h> 
+
+const int triggerPin = 6;
+const int echoPin = 7;
+int servoPin = 3; 
+int servoPin2 = 4;
+
+const int echoPin1 = 8;
+const int trigPin1 = 9;
+const int buz = 10;
+
+Servo Servo1; 
+Servo Servo2; 
+long duration;
+int distance;
+long duration1;
+int distance1;
+
+void setup() {
+
+  Serial.begin(9600);
+  Servo1.attach(servoPin); 
+  Servo2.attach(servoPin2); 
+  Serial.println("Circuit Initiated");
+
+  pinMode(triggerPin, OUTPUT); 
+  pinMode(echoPin, INPUT); 
+  pinMode(trigPin1, OUTPUT); 
+  pinMode(echoPin1, INPUT); 
+  pinMode(buz, OUTPUT); 
+}
+
+void loop() {
+    
+      digitalWrite(triggerPin, LOW);
+      delayMicroseconds(2);
+      digitalWrite(triggerPin, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(echoPin, LOW);
+      duration= pulseIn(echoPin, HIGH);
+      distance= duration*0.034/2;
+
+      Serial.print("Distance: ");
+      Serial.println(distance);
+      delay(1000);
+
+      if(distance < 10)
+        {
+          Servo1.write(0); 
+          Servo2.write(0);
+          delay(3000); 
+          //Servo1.write(90); 
+          //Servo2.write(90);
+          Servo1.write(90);
+          Servo2.write(90);
+          Serial.println("Some one come for put dust"); 
+        }else
+        {
+          Serial.println("----Ok----"); 
+        }
+      delay(400);
+
+      digitalWrite(trigPin1, LOW);
+      delayMicroseconds(2);
+      digitalWrite(trigPin1, HIGH);
+      delayMicroseconds(10);
+      digitalWrite(echoPin1, LOW);
+      duration1= pulseIn(echoPin1, HIGH);
+      distance1= duration1*0.034/2;
+
+      Serial.print("Distance 1: ");
+      Serial.println(distance1);
+      delay(400);
+
+      if(distance1<10){
+        tone(buz,1000);
+      }else{
+        noTone(buz);        
+      }
+
+}
